@@ -9,7 +9,7 @@ setup(
     author='David Gomez',
     author_email='amb1s1@gmail.com',
     license='MIT',
-    install_requires=['Click'],
+    install_requires=['Click', 'colorama'],
     entry_points={
         'console_scripts': [
             'ansible-replay=replay:replay',
