@@ -5,7 +5,8 @@ import time
 from colorama import Fore, Back, Style
 import click
 
-colors = {'ok': 'GREEN', 'changed': 'YELLOW', 'unreachable': 'RED', 'failed': 'RED', 'other': 'WHITE'}
+colors = {'ok': 'GREEN', 'changed': 'YELLOW',
+          'unreachable': 'RED', 'failed': 'RED', 'other': 'WHITE'}
 
 def itemcolor(items):
     result_colors = {'other': 'WHITE'}
