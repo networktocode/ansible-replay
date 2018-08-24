@@ -46,4 +46,8 @@ sample.log is the  that you capture from your ansible-playbook
 .. code-block:: bash
 
   $ ansible-playbook sample_playbook.yml > sample.log
+  
+  
+  <a href="https://asciinema.org/a/198064?autoplay=1" target="_blank"><img src="asciinema.org/a/198064.png" width="835"/></a>
+
 
