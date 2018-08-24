@@ -28,6 +28,40 @@ def itemcolor(items):
 
     return result_colors
 
+class ReplayLines:
+    def __init__(self, line):
+        self.ok =  'GREEN'
+        self.skipping =  'BLUE'
+        self.change =  'YELLOW'
+        self.unreachable = 'RED'
+        self.failed = 'RED'
+        self.other = 'WHITE'
+        self.line = line
+
+    def _isok(self):
+        return ('ok' in self.line)
+
+    def _ischanged(self):
+        return ('changed' in self.line)
+
+    def _isunreachable(self):
+        return ('unreachable' in self.line)
+
+    def _isfailed(self):
+        return ('failed' in self.line)
+
+    def color(self):
+        if self._isok():
+            return self.ok
+        elif self._ischanged():
+            return self.change
+        elif self._isunreachable():
+            return self.unreachable
+        elif self._isfailed():
+            return self.failed
+        else:
+            return self.other
+
 @click.command()
 @click.option('--host-timer', default=0.10,
               help='Hold timer between host')
@@ -44,46 +78,7 @@ def replay(host_timer, task_timer, task_pause, ansible_file_log):
 
     for line in out_file:
         line = line.strip()
-        if not play_recap:
-            if 'ok:' in line:
-                time.sleep(host_timer)
-                print(Fore.GREEN + line)
-            elif 'fatal:' in line:
-                time.sleep(host_timer)
-                print (Fore.RED + line)
-            elif 'changed:' in line:
-                time.sleep(host_timer)
-                print (Fore.YELLOW + line)
-            elif 'skipping:' in line:
-                time.sleep(host_timer)
-                print (Fore.BLUE + line)
-            elif 'included:' in line:
-                time.sleep(host_timer)
-                print (Fore.BLUE + line)
-            elif 'TASK' in line:
-                print (Fore.WHITE + line)
-                time.sleep(0.5)
-                raw_input('')
-            elif 'PLAY RECAP' in line:
-                print (Fore.WHITE + line)
-                play_recap = True
-                time.sleep(0.5)
-                raw_input('')
-            else:
-                time.sleep(0.5)
-                print (line)
-        else:
-            try:
-                lines = line.split()
-                _, sp1, sp2, sp3, sp4, sp5, _ = re.split("\S+", line)
-                colors_dict = itemcolor(lines)
-
-                print ("{}{}{}{}{}{}{}{}{}{}{}".format(getattr(Fore, colors_dict['other']) + lines[0], sp1,
-                                                       getattr(Fore, colors_dict['other']) + lines[1], sp2,
-                                                       getattr(Fore, colors_dict['ok']) + lines[2], sp3,
-                                                       getattr(Fore, colors_dict['changed']) + lines[3], sp5,
-                                                       getattr(Fore, colors_dict['unreachable']) + lines[4], sp5,
-                                                   getattr(Fore, colors_dict['failed']) + lines[5]))
-            except:
-                pass
+        replay_line = ReplayLines(line)
+        color = replay_line.color()
+        print (getattr(Fore, color) + line)
 
