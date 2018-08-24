@@ -14,7 +14,37 @@ Replay Ansible capture output.
 * Free software: MIT license
 * Documentation: (COMING SOON!) https://ansible-replay.readthedocs.org.
 
-Features
---------
+Requirements
+------------
 
-* TODO
+click
+
+Installation
+------------
+
+installing Requirements
+For Ubuntu:
+
+.. code-block:: bash
+
+  $ pip install -r requirements.txt
+
+.. code-block:: bash
+
+  $ pip install .
+
+ansible-replay is ready to run!
+
+Running
+-------
+
+.. code-block:: bash
+
+ $ ansible-replay sample.log
+
+
+sample.log is the  that you capture from your ansible-playbook
+.. code-block:: bash
+
+  $ ansible-playbook sample_playbook.yml > sample.log
+
