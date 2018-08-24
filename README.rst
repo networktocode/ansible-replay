@@ -23,7 +23,6 @@ Installation
 ------------
 
 installing Requirements
-For Ubuntu:
 
 .. code-block:: bash
 
@@ -42,8 +41,8 @@ Running
 
  $ ansible-replay sample.log
 
-
 sample.log is the  that you capture from your ansible-playbook
+
 .. code-block:: bash
 
   $ ansible-playbook sample_playbook.yml > sample.log
