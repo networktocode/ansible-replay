@@ -37,3 +37,6 @@ sample.log is the  that you capture from your ansible-playbook
   $ ansible-playbook sample_playbook.yml > sample.log
 ```
 
+# Screencast
+
+[![asciicast](https://asciinema.org/a/aeF8OjpXsXyXJoA0C2GP3Qk93.png)](https://asciinema.org/a/aeF8OjpXsXyXJoA0C2GP3Qk93)
