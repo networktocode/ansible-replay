@@ -39,4 +39,4 @@ sample.log is the  that you capture from your ansible-playbook
 
 # Screencast
 
-[![asciicast](https://asciinema.org/a/aeF8OjpXsXyXJoA0C2GP3Qk93.png)](https://asciinema.org/a/aeF8OjpXsXyXJoA0C2GP3Qk93)
+![Alt Text](data/ansible-replay.gif)
