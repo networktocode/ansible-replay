@@ -10,6 +10,7 @@
 # Requirements
 
 click
+colorama
 
 # Installation
 
@@ -18,12 +19,18 @@ installing Requirements
 ```
   $ pip install -r requirements.txt
 ```
+Clone repo
+```
+  $ clone https://github.com/amb1s1/ansible-replay.git
+```
+Install ansible-replay
 
 ```
+  $ cd ansible-replay
   $ pip install .
 ```
 
-ansible-replay is ready to run!
+**ansible-replay is ready to run!**
 
 # Running
 
@@ -31,7 +38,7 @@ ansible-replay is ready to run!
  $ ansible-replay sample.log
 ```
 
-sample.log is the  that you capture from your ansible-playbook
+##### sample.log is the capture from your ansible-playbook**
 
 ```
   $ ansible-playbook sample_playbook.yml > sample.log
