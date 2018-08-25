@@ -1,8 +1,8 @@
 # Ansible Replay
 
 <a href="https://travis-ci.org/ambv/black"><img alt="Build Status" src="https://travis-ci.org/ambv/black.svg?branch=master"></a>
+<a href="https://pypi.python.org/pypi/ansible-replay"><img alt="Build Status" src="https://img.shields.io/pypi/v/ansible-replay.svg?branch=master"></a>
 
-Replay Ansible capture output.
 
 * Free software: MIT license
 * Documentation: (COMING SOON!) https://ansible-replay.readthedocs.org.
