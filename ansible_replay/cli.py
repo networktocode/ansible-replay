@@ -28,7 +28,19 @@ def itemcolor(items):
 
     return result_colors
 
-class ReplayLines:
+class Timer(object):
+    def __init__(self, line, task_timer, host_timer ):
+        self.task_timer = task_timer
+        self.host_timer = host_timer
+        self.line = line
+
+    def get_sleep(self):
+        if 'task' in self.line:
+            return self.task_timer
+        return self.host_timer
+
+
+class ReplayLines(object):
     def __init__(self, line):
         self.ok =  'GREEN'
         self.skipping =  'BLUE'
@@ -44,6 +56,9 @@ class ReplayLines:
     def _ischanged(self):
         return ('changed' in self.line)
 
+    def _isskipping(self):
+        return ('skipping' in self.line)
+
     def _isunreachable(self):
         return ('unreachable' in self.line)
 
@@ -55,12 +70,15 @@ class ReplayLines:
             return self.ok
         elif self._ischanged():
             return self.change
+        elif self._isskipping():
+            return self.skipping
         elif self._isunreachable():
             return self.unreachable
         elif self._isfailed():
             return self.failed
         else:
             return self.other
+
 
 @click.command()
 @click.option('--host-timer', default=0.10,
@@ -77,8 +95,10 @@ def replay(host_timer, task_timer, task_pause, ansible_file_log):
     play_recap = False
 
     for line in out_file:
-        line = line.strip()
+        line = line.strip().lower()
         replay_line = ReplayLines(line)
         color = replay_line.color()
         print (getattr(Fore, color) + line)
+        timer = Timer(line, task_timer, host_timer)
+        time.sleep(timer.get_sleep())
 
