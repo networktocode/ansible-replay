@@ -2,34 +2,12 @@ from __future__ import print_function
 import re
 import time
 
-from colorama import Fore, Back, Style
+from colorama import Fore
 import click
 
-colors = {'ok': 'GREEN', 'changed': 'YELLOW',
-          'unreachable': 'RED', 'failed': 'RED', 'other': 'WHITE'}
-
-def itemcolor(items):
-    result_colors = {'other': 'WHITE'}
-    for item in items:
-        if "=" in item:
-            name, number = item.split('=')
-            if int(number) == 0:
-                result_colors[name] = 'WHITE'
-            else:
-                result_colors[name] = colors[name]
-    if result_colors['failed'] == 'RED':
-        result_colors['other'] = 'RED'
-    elif result_colors['unreachable'] == 'RED':
-        result_colors['other'] = 'RED'
-    elif result_colors['changed'] == 'YELLOW':
-        result_colors['other'] = 'YELLOW'
-    elif result_colors['ok'] == 'GREEN':
-        result_colors['other'] = 'GREEN'
-
-    return result_colors
 
 class Timer(object):
-    def __init__(self, line, task_timer, host_timer ):
+    def __init__(self, line, task_timer, host_timer):
         self.task_timer = task_timer
         self.host_timer = host_timer
         self.line = line
@@ -39,46 +17,72 @@ class Timer(object):
             return self.task_timer
         return self.host_timer
 
+    def is_pause(self):
+        if 'task' in self.line:
+            return True
 
-class ReplayLines(object):
-    def __init__(self, line):
-        self.ok =  'GREEN'
-        self.skipping =  'BLUE'
-        self.change =  'YELLOW'
+
+class ReplayLine(object):
+    def __init__(self):
+        self.ok = 'GREEN'
+        self.skipping = 'BLUE'
+        self.changed = 'YELLOW'
         self.unreachable = 'RED'
         self.failed = 'RED'
         self.other = 'WHITE'
-        self.line = line
+        self.recap = False
 
-    def _isok(self):
+    def _is_ok(self):
         return ('ok' in self.line)
 
-    def _ischanged(self):
+    def _is_changed(self):
         return ('changed' in self.line)
 
-    def _isskipping(self):
+    def _is_skipping(self):
         return ('skipping' in self.line)
 
-    def _isunreachable(self):
+    def _is_unreachable(self):
         return ('unreachable' in self.line)
 
-    def _isfailed(self):
+    def _is_failed(self):
         return ('failed' in self.line)
 
-    def color(self):
-        if self._isok():
+    def _set_recap(self):
+        if 'recap' in self.line:
+            self.recap = True
+
+    def _set_line(self, line):
+        self.line = line
+
+    def _get_color(self):
+        if self._is_ok():
             return self.ok
-        elif self._ischanged():
-            return self.change
-        elif self._isskipping():
+        elif self._is_changed():
+            return self.changed
+        elif self._is_skipping():
             return self.skipping
-        elif self._isunreachable():
+        elif self._is_unreachable():
             return self.unreachable
-        elif self._isfailed():
+        elif self._is_failed():
             return self.failed
         else:
             return self.other
 
+    def _get_recap_colors(self, line):
+        if '=' in line:
+            name, number = line.split('=')
+            if int(number) == 0:
+                setattr(self, name, 'WHITE')
+            else:
+                setattr(self, name, getattr(self, name))
+        if self.failed == 'RED':
+            self.other = 'RED'
+        elif self.unreachable == 'RED':
+            self.other = 'RED'
+        elif self.changed == 'YELLOW':
+            self.other = 'YELLOW'
+        elif self.ok == 'GREEN':
+            self.other = 'GREEN'
 
 @click.command()
 @click.option('--host-timer', default=0.10,
@@ -90,15 +94,29 @@ class ReplayLines(object):
 @click.argument('ansible_file_log', type=click.File('r'),
                 required=True)
 def replay(host_timer, task_timer, task_pause, ansible_file_log):
-    out_file = ansible_file_log.readlines()
+    lines = ansible_file_log.readlines()
     ansible_file_log.close()
-    play_recap = False
-
-    for line in out_file:
+    replay_line = ReplayLine()
+    for line in lines:
         line = line.strip().lower()
-        replay_line = ReplayLines(line)
-        color = replay_line.color()
-        print (getattr(Fore, color) + line)
-        timer = Timer(line, task_timer, host_timer)
-        time.sleep(timer.get_sleep())
-
+        if not replay_line.recap:
+            replay_line._set_line(line)
+            replay_line._set_recap()
+            color = replay_line._get_color()
+            print (getattr(Fore, color) + line)
+            timer = Timer(line, task_timer, host_timer)
+            time.sleep(timer.get_sleep())
+            if task_pause:
+                if timer.is_pause():
+                    raw_input('')
+        else:
+            recap_lines = line.split()
+            for recap_line in recap_lines:
+                replay_line._get_recap_colors(recap_line)
+            _, sp1, sp2, sp3, sp4, sp5, _ = re.split("\S+", line)
+            print ("{}{}{}{}{}{}{}{}{}{}{}".format(getattr(Fore, replay_line.other) + recap_lines[0], sp1,
+                                                   getattr(Fore, replay_line.other) + recap_lines[1], sp2,
+                                                   getattr(Fore, replay_line.ok) + recap_lines[2], sp3,
+                                                   getattr(Fore, replay_line.changed) + recap_lines[3], sp5,
+                                                   getattr(Fore, replay_line.unreachable) + recap_lines[4], sp5,
+                                                   getattr(Fore, replay_line.failed) + recap_lines[5]))
