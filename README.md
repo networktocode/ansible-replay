@@ -10,6 +10,7 @@
 # Requirements
 
 click
+
 colorama
 
 # Installation
