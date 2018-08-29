@@ -19,44 +19,48 @@ Features
 
 * TODO
 
-# Requirements
-
+Requirements
+--------
 click
-
 colorama
 
-# Installation
+Installation
+--------
 
 installing Requirements
 
-```
+.. code-block:: bash
   $ pip install -r requirements.txt
-```
+
 Clone repo
-```
+.. code-block:: bash
+
   $ clone https://github.com/amb1s1/ansible-replay.git
-```
+
 Install ansible-replay
 
-```
+.. code-block:: bash
   $ cd ansible-replay
+  
+.. code-block:: bash
   $ pip install .
-```
+
 
 **ansible-replay is ready to run!**
 
-# Running
+Running
+--------
 
-```
+.. code-block:: bash
  $ ansible-replay sample.log
-```
 
-##### sample.log is the capture from your ansible-playbook**
 
-```
+sample.log is the capture from your ansible-playbook**
+
+.. code-block:: bash
   $ ansible-playbook sample_playbook.yml > sample.log
-```
 
-# Screencast
+Screencast
+--------
 
-![Alt Text](data/ansible-replay.gif)
+.. image:: data/ansible-replay.gif
