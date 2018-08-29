@@ -19,6 +19,7 @@ with open(path.join(here, 'HISTORY.rst'), encoding='utf-8') as history_file:
 requirements = [
     # TODO: put package requirements here
     'click',
+    'colorama',
 ]
 
 test_requirements = [
