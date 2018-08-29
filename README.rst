@@ -23,12 +23,6 @@ colorama
 Installation
 --------
 
-**installing Requirements**
-
-.. code-block:: bash
-
-  $ pip install -r requirements.txt
-
 **Clone repo**
 
 .. code-block:: bash
