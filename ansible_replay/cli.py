@@ -74,7 +74,16 @@ class ReplayLine(object):
             if int(number) == 0:
                 setattr(self, name, 'WHITE')
             else:
-                setattr(self, name, getattr(self, name))
+                if name == 'failed':
+                    setattr(self, name, 'RED')
+                elif name == 'unreachable':
+                    setattr(self, name, 'RED')
+                elif name == 'changed':
+                    setattr(self, name, 'YELLOW')
+                elif name == 'ok':
+                    setattr(self, name, 'GREEN')
+
+    def set_recap(self):
         if self.failed == 'RED':
             self.other = 'RED'
         elif self.unreachable == 'RED':
@@ -83,6 +92,7 @@ class ReplayLine(object):
             self.other = 'YELLOW'
         elif self.ok == 'GREEN':
             self.other = 'GREEN'
+
 
 @click.command()
 @click.option('--host-timer', default=0.10,
@@ -112,11 +122,15 @@ def replay(host_timer, task_timer, task_pause, ansible_file_log):
         else:
             recap_lines = line.split()
             for recap_line in recap_lines:
-                replay_line._get_recap_colors(recap_line)
-            _, sp1, sp2, sp3, sp4, sp5, _ = re.split("\S+", line)
-            print ("{}{}{}{}{}{}{}{}{}{}{}".format(getattr(Fore, replay_line.other) + recap_lines[0], sp1,
-                                                   getattr(Fore, replay_line.other) + recap_lines[1], sp2,
-                                                   getattr(Fore, replay_line.ok) + recap_lines[2], sp3,
-                                                   getattr(Fore, replay_line.changed) + recap_lines[3], sp5,
-                                                   getattr(Fore, replay_line.unreachable) + recap_lines[4], sp5,
-                                                   getattr(Fore, replay_line.failed) + recap_lines[5]))
+                replay_line._get_recap_colors(recap_line.strip())
+            try:
+                _, sp1, sp2, sp3, sp4, sp5, _ = re.split("\S+", line)
+                replay_line.set_recap()
+                print ("{}{}{}{}{}{}{}{}{}{}{}".format(getattr(Fore, replay_line.other) + recap_lines[0], sp1,
+                                                       getattr(Fore, replay_line.other) + recap_lines[1], sp2,
+                                                       getattr(Fore, replay_line.ok) + recap_lines[2], sp3,
+                                                       getattr(Fore, replay_line.changed) + recap_lines[3], sp5,
+                                                       getattr(Fore, replay_line.unreachable) + recap_lines[4], sp5,
+                                                       getattr(Fore, replay_line.failed) + recap_lines[5]))
+            except:
+                pass
