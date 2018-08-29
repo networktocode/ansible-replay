@@ -14,11 +14,6 @@ Replay Ansible capture output.
 * Free software: MIT license
 * Documentation: (COMING SOON!) https://ansible-replay.readthedocs.org.
 
-Features
---------
-
-* TODO
-
 Requirements
 --------
 click
@@ -28,19 +23,19 @@ colorama
 Installation
 --------
 
-installing Requirements
+**installing Requirements**
 
 .. code-block:: bash
 
   $ pip install -r requirements.txt
 
-Clone repo
+**Clone repo**
 
 .. code-block:: bash
 
    $ clone https://github.com/amb1s1/ansible-replay.git
 
-Install ansible-replay
+**Install ansible-replay**
 
 .. code-block:: bash
 
@@ -61,7 +56,7 @@ Running
    $ ansible-replay sample.log
 
 
-sample.log is the capture from your ansible-playbook**
+**sample.log is the capture from your ansible-playbook**
 
 .. code-block:: bash
 
