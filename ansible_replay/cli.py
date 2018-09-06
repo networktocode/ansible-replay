@@ -127,7 +127,7 @@ def replay(host_timer, task_timer, task_pause, ansible_file_log):
                 _, sp1, sp2, sp3, sp4, sp5, _ = re.split("\S+", line)
                 replay_line.set_recap()
                 print ("{}{}{}{}{}{}{}{}{}{}{}".format(getattr(Fore, replay_line.other) + recap_lines[0], sp1,
-                                                       getattr(Fore, replay_line.other) + recap_lines[1], sp2,
+                                                       getattr(Fore, 'WHITE') + recap_lines[1], sp2,
                                                        getattr(Fore, replay_line.ok) + recap_lines[2], sp3,
                                                        getattr(Fore, replay_line.changed) + recap_lines[3], sp5,
                                                        getattr(Fore, replay_line.unreachable) + recap_lines[4], sp5,
